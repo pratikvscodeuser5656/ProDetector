@@ -3,129 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Content Detector</title>
+    <title>AI Content Detector | Powered by Gemini</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; line-height: 1.6; color: #333; }
-        .container { display: flex; flex-direction: column; gap: 15px; background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef; }
-        input[type="file"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        textarea { height: 100px; resize: vertical; }
-        button { padding: 12px; background: #0056b3; color: white; border: none; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 16px; transition: background 0.2s; }
-        button:hover { background: #003d82; }
-        button:disabled { background: #cccccc; cursor: not-allowed; }
-        #resultBox { margin-top: 20px; padding: 15px; border: 1px solid #c3e6cb; background: #d4edda; border-radius: 5px; display: none; white-space: pre-wrap; }
-        .error { border-color: #f5c6cb; background: #f8d7da; color: #721c24; }
-        .loading { text-align: center; font-style: italic; color: #555; display: none; margin-top: 10px;}
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success-bg: #dcfce7;
+            --success-text: #166534;
+            --error-bg: #fee2e2;
+            --error-text: #991b1b;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            max-width: 650px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        input[type="file"], textarea { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
+            background-color: #f8fafc;
+        }
+
+        input[type="file"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: #fff;
+        }
+
+        textarea { 
+            height: 120px; 
+            resize: vertical; 
+        }
+
+        .how-it-works {
+            background-color: #eff6ff;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .how-it-works h4 {
+            margin: 0 0 8px 0;
+            color: #1e3a8a;
+            font-size: 0.95rem;
+        }
+
+        .how-it-works p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #1e40af;
+        }
+
+        button { 
+            width: 100%;
+            padding: 14px; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            font-size: 1rem; 
+            transition: background 0.2s, transform 0.1s; 
+        }
+
+        button:hover { 
+            background: var(--primary-hover); 
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled { 
+            background: #cbd5e1; 
+            cursor: not-allowed; 
+            transform: none;
+        }
+
+        #resultBox { 
+            margin-top: 24px; 
+            padding: 20px; 
+            border-radius: 8px; 
+            display: none; 
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            border: 1px solid var(--success-bg);
+            background: var(--success-bg);
+            color: var(--success-text);
+        }
+
+        #resultBox.error { 
+            border-color: #fca5a5; 
+            background: var(--error-bg); 
+            color: var(--error-text); 
+        }
+
+        /* Loading Spinner */
+        .loading-container {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
     </style>
 </head>
 <body>
 
-    <h2>AI Content Detector</h2>
-    <p>Upload an image or paste text to check if it was generated by AI.</p>
+    <div class="app-container">
+        <div class="header">
+            <h1>AI Content Detector</h1>
+            <p>Instantly analyze images and text to spot AI generation.</p>
+        </div>
 
-    <div class="container">
-        <label><strong>1. Upload Image (Optional)</strong></label>
-        <input type="file" id="imageInput" accept="image/*">
+        <div class="card">
+            
+            <div class="how-it-works">
+                <h4>🔍 How it works</h4>
+                <p>Upload a suspicious image, paste some text, or do both! Our digital forensic model will scan the content for common AI artifacts (like impossible geometry in photos) or robotic phrasing (in text).</p>
+            </div>
 
-        <label><strong>2. Paste Text (Optional)</strong></label>
-        <textarea id="textInput" placeholder="Paste text here..."></textarea>
+            <div class="input-group">
+                <label for="imageInput">1. Upload Image (Optional)</label>
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
 
-        <button id="analyzeBtn" onclick="analyzeContent()">Analyze Content</button>
-        <div id="loadingText" class="loading">Analyzing with Gemini... Please wait.</div>
-    </div>
+            <div class="input-group">
+                <label for="textInput">2. Paste Text (Optional)</label>
+                <textarea id="textInput" placeholder="Paste the article, essay, or email here..."></textarea>
+            </div>
 
-    <div id="resultBox"></div>
-
-    <script>
-        // Helper function to convert an uploaded image to a Base64 string
-        function fileToGenerativePart(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const base64Data = reader.result.split(',')[1];
-                    resolve({
-                        inlineData: {
-                            data: base64Data,
-                            mimeType: file.type
-                        }
-                    });
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-
-        async function analyzeContent() {
-            const imageFile = document.getElementById('imageInput').files[0];
-            const textContent = document.getElementById('textInput').value.trim();
-            const resultBox = document.getElementById('resultBox');
-            const loadingText = document.getElementById('loadingText');
-            const analyzeBtn = document.getElementById('analyzeBtn');
-
-            if (!imageFile && !textContent) {
-                alert("Please upload an image or enter some text to analyze.");
-                return;
-            }
-
-            // UI updates
-            resultBox.style.display = 'none';
-            resultBox.className = '';
-            loadingText.style.display = 'block';
-            analyzeBtn.disabled = true;
-
-            try {
-                // The strict forensic prompt for better results
-                const prompt = `You are an expert digital forensic analyst. Examine the provided content and determine if it is likely AI-generated or human-created. Look for common AI artifacts in images (e.g., weird textures, impossible geometry) or robotic phrasing/hallucinations in text. Provide your response strictly in this format: VERDICT, CONFIDENCE, and REASONING.`;
-                
-                let parts = [{ text: prompt }];
-
-                if (textContent) {
-                    parts.push({ text: `\n\nContent to analyze: "${textContent}"` });
-                }
-
-                if (imageFile) {
-                    const imagePart = await fileToGenerativePart(imageFile);
-                    parts.push(imagePart);
-                }
-
-                // THIS IS THE CRITICAL CHANGE: 
-                // It now points to your secure Vercel backend instead of Google directly.
-                const apiUrl = `/api/detect`; 
-                
-                const requestBody = {
-                    contents: [{
-                        parts: parts
-                    }],
-                    generationConfig: {
-                        temperature: 0.1, // Keeps the model strict and analytical
-                        topK: 32,
-                        topP: 1
-                    }
-                };
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestBody)
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.candidates && data.candidates.length > 0) {
-                    const analysisText = data.candidates[0].content.parts[0].text;
-                    resultBox.innerHTML = `<strong>Analysis Results:</strong><br><br>${analysisText}`;
-                } else {
-                    throw new Error(data.error?.message || "Failed to fetch from the secure API.");
-                }
-
-            } catch (error) {
-                resultBox.className = 'error';
-                resultBox.innerHTML = `<strong>Error:</strong> ${error.message}`;
-            } finally {
-                loadingText.style.display = 'none';
-                resultBox.style.display = 'block';
-                analyzeBtn.disabled = false;
-            }
-        }
-    </script>
-</body>
-</html>
+            <button id="analyzeBtn" onclick="analyzeContent()">Analyze
