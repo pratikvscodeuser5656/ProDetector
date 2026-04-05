@@ -81,8 +81,25 @@
             loadingText.style.display = 'block';
             analyzeBtn.disabled = true;
 
-            try {
-                const prompt = "Analyze the provided content (image, text, or both). Is it likely AI-generated or human-created? Provide your reasoning, looking for common AI artifacts in images (e.g., weird textures, impossible geometry) or robotic phrasing/hallucinations in text. If both are provided, analyze both.";
+           try {
+                // 1. A much stricter, forensic prompt
+                const prompt = `You are an expert digital forensic analyst. Examine the provided content and determine if it is likely AI-generated or human-created.
+
+If analyzing TEXT, look for:
+- Lack of "burstiness" (sentences being all the same length/structure).
+- Overuse of common AI vocabulary (e.g., "delve", "multifaceted", "testament to").
+- Lack of personal anecdote or genuine human nuance.
+
+If analyzing IMAGES, look for:
+- Anatomical anomalies (weird fingers, asymmetrical eyes/pupils, teeth blending together).
+- Structural impossibilities (lines not connecting behind objects, nonsensical background architecture).
+- Texture blending (hair turning into clothing, objects melting into each other).
+- Gibberish text on signs or clothing.
+
+Provide your response strictly in this format:
+VERDICT: [AI-Generated, Human-Created, or Inconclusive]
+CONFIDENCE: [0-100%]
+REASONING: [Bullet points of your specific findings]`;
                 
                 let parts = [{ text: prompt }];
 
@@ -95,14 +112,19 @@
                     parts.push(imagePart);
                 }
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
                 
+                // 2. Add generationConfig to lower the temperature
                 const requestBody = {
                     contents: [{
                         parts: parts
-                    }]
+                    }],
+                    generationConfig: {
+                        temperature: 0.1, // Forces strict, analytical answers rather than creative ones
+                        topK: 32,
+                        topP: 1
+                    }
                 };
-
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
