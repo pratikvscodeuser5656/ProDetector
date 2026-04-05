@@ -36,10 +36,6 @@
     <div id="resultBox"></div>
 
     <script>
-        // --- PASTE YOUR API KEY HERE ---
-        const API_KEY = "AIzaSyCzOq0sDuUYgQgsVWGo1CPNyrgMDsQQzqA"; 
-        // -------------------------------
-
         // Helper function to convert an uploaded image to a Base64 string
         function fileToGenerativePart(file) {
             return new Promise((resolve, reject) => {
@@ -65,11 +61,6 @@
             const loadingText = document.getElementById('loadingText');
             const analyzeBtn = document.getElementById('analyzeBtn');
 
-            if (API_KEY === "YOUR_API_KEY_HERE") {
-                alert("Please add your actual API key to the script before running.");
-                return;
-            }
-
             if (!imageFile && !textContent) {
                 alert("Please upload an image or enter some text to analyze.");
                 return;
@@ -81,25 +72,9 @@
             loadingText.style.display = 'block';
             analyzeBtn.disabled = true;
 
-           try {
-                // 1. A much stricter, forensic prompt
-                const prompt = `You are an expert digital forensic analyst. Examine the provided content and determine if it is likely AI-generated or human-created.
-
-If analyzing TEXT, look for:
-- Lack of "burstiness" (sentences being all the same length/structure).
-- Overuse of common AI vocabulary (e.g., "delve", "multifaceted", "testament to").
-- Lack of personal anecdote or genuine human nuance.
-
-If analyzing IMAGES, look for:
-- Anatomical anomalies (weird fingers, asymmetrical eyes/pupils, teeth blending together).
-- Structural impossibilities (lines not connecting behind objects, nonsensical background architecture).
-- Texture blending (hair turning into clothing, objects melting into each other).
-- Gibberish text on signs or clothing.
-
-Provide your response strictly in this format:
-VERDICT: [AI-Generated, Human-Created, or Inconclusive]
-CONFIDENCE: [0-100%]
-REASONING: [Bullet points of your specific findings]`;
+            try {
+                // The strict forensic prompt for better results
+                const prompt = `You are an expert digital forensic analyst. Examine the provided content and determine if it is likely AI-generated or human-created. Look for common AI artifacts in images (e.g., weird textures, impossible geometry) or robotic phrasing/hallucinations in text. Provide your response strictly in this format: VERDICT, CONFIDENCE, and REASONING.`;
                 
                 let parts = [{ text: prompt }];
 
@@ -112,19 +87,21 @@ REASONING: [Bullet points of your specific findings]`;
                     parts.push(imagePart);
                 }
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
+                // THIS IS THE CRITICAL CHANGE: 
+                // It now points to your secure Vercel backend instead of Google directly.
+                const apiUrl = `/api/detect`; 
                 
-                // 2. Add generationConfig to lower the temperature
                 const requestBody = {
                     contents: [{
                         parts: parts
                     }],
                     generationConfig: {
-                        temperature: 0.1, // Forces strict, analytical answers rather than creative ones
+                        temperature: 0.1, // Keeps the model strict and analytical
                         topK: 32,
                         topP: 1
                     }
                 };
+
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -137,7 +114,7 @@ REASONING: [Bullet points of your specific findings]`;
                     const analysisText = data.candidates[0].content.parts[0].text;
                     resultBox.innerHTML = `<strong>Analysis Results:</strong><br><br>${analysisText}`;
                 } else {
-                    throw new Error(data.error?.message || "Unknown API error occurred.");
+                    throw new Error(data.error?.message || "Failed to fetch from the secure API.");
                 }
 
             } catch (error) {
