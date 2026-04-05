@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Content Detector | Powered by Gemini</title>
+    <title>AI Content Detector | Rave Edition</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
@@ -20,21 +20,75 @@
             100% { background-color: #ff0055; }
         }
 
+        /* --- CHRISTMAS LIGHTS FLICKER --- */
+        @keyframes flicker {
+            0%, 100% { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 5px currentColor); }
+            50% { opacity: 0.4; filter: brightness(0.8) drop-shadow(0 0 0px currentColor); }
+        }
+
+        /* --- FLOATING DANCE ANIMATION --- */
+        @keyframes floatDance {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, -20px) rotate(10deg); }
+            50% { transform: translate(100px, 0) rotate(0deg); }
+            75% { transform: translate(50px, 20px) rotate(-10deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
         body { 
             font-family: 'Inter', sans-serif; 
-            /* This triggers the flashing background! */
             animation: caramelldansen 0.8s infinite; 
             color: var(--text-main);
-            line-height: 1.6;
             margin: 0;
-            padding: 40px 20px;
+            padding: 60px 20px 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* New Fun Header Styles */
+        /* Christmas Lights Container */
+        .light-string {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            display: flex;
+            justify-content: space-around;
+            padding: 5px 0;
+            z-index: 2000;
+            background: rgba(0,0,0,0.2);
+            pointer-events: none;
+        }
+
+        .light {
+            width: 15px;
+            height: 22px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+        }
+
+        /* Different colored lights with staggered flicker */
+        .light.red { color: #ff0000; background: #ff0000; animation: flicker 0.6s infinite; }
+        .light.green { color: #00ff00; background: #00ff00; animation: flicker 0.8s infinite 0.2s; }
+        .light.blue { color: #0000ff; background: #0000ff; animation: flicker 0.7s infinite 0.4s; }
+        .light.yellow { color: #ffff00; background: #ffff00; animation: flicker 0.9s infinite 0.1s; }
+
+        /* Background Dancing Girls */
+        .bg-dancer {
+            position: fixed;
+            width: 150px;
+            height: auto;
+            z-index: -1;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .dancer-left { top: 20%; left: 5%; animation: floatDance 4s infinite linear; }
+        .dancer-right { bottom: 20%; right: 5%; animation: floatDance 5s infinite linear reverse; }
+
         .fun-header-container {
             display: flex;
             align-items: center;
@@ -43,15 +97,13 @@
             margin: 0 auto 30px auto;
             max-width: 650px;
             width: 100%;
-            padding: 0 20px;
-            box-sizing: border-box;
+            z-index: 10;
         }
 
         .confused-gemini-img {
             max-height: 120px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            /* Adds a fun little bounce to the anime image */
             animation: bounce 0.8s infinite alternate; 
         }
 
@@ -64,65 +116,23 @@
             font-family: 'Modak', cursive;
             font-size: 3.5rem;
             color: #1e3a8a;
-            margin: 0;
-            /* Thick white outline so it pops on the rainbow background */
             text-shadow: 
                 -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff, 3px 3px 0 #fff,
-                -4px 0 0 #fff, 4px 0 0 #fff, 0 -4px 0 #fff, 0 4px 0 #fff,
                 0 6px 10px rgba(0,0,0,0.3);
-            letter-spacing: -0.01em;
-            line-height: 1.1;
         }
 
-        @media (max-width: 600px) {
-            .fun-header-container {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-            .fun-font-text {
-                font-size: 2.8rem;
-            }
-        }
-
-        /* App Styles */
+        /* Card Styles */
         :root {
             --primary: #2563eb;
-            --primary-hover: #1d4ed8;
             --card-bg: #ffffff;
             --text-main: #0f172a;
-            --text-muted: #64748b;
             --border-color: #e2e8f0;
-            --success-bg: #dcfce7;
-            --success-text: #166534;
-            --error-bg: #fee2e2;
-            --error-text: #991b1b;
         }
 
         .app-container {
             max-width: 650px;
             width: 100%;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--card-bg); /* Made white to contrast the background */
-            letter-spacing: -0.02em;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .header p {
-            color: #f1f5f9;
-            font-size: 1.1rem;
-            margin: 0;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            z-index: 10;
         }
 
         .card {
@@ -133,57 +143,14 @@
             border: 4px solid #fff;
         }
 
-        .input-group {
-            margin-bottom: 24px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-
-        input[type="file"], textarea { 
+        textarea { 
             width: 100%; 
+            height: 120px;
             padding: 12px; 
             border: 1px solid var(--border-color); 
             border-radius: 8px; 
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            transition: border-color 0.2s;
             background-color: #f8fafc;
-        }
-
-        input[type="file"]:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            background-color: #fff;
-        }
-
-        textarea { 
-            height: 120px; 
-            resize: vertical; 
-        }
-
-        .how-it-works {
-            background-color: #eff6ff;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 24px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .how-it-works h4 {
-            margin: 0 0 8px 0;
-            color: #1e3a8a;
-            font-size: 0.95rem;
-        }
-
-        .how-it-works p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: #1e40af;
+            font-family: 'Inter', sans-serif;
         }
 
         button { 
@@ -195,22 +162,7 @@
             cursor: pointer; 
             border-radius: 8px; 
             font-weight: 600; 
-            font-size: 1rem; 
-            transition: background 0.2s, transform 0.1s; 
-        }
-
-        button:hover { 
-            background: var(--primary-hover); 
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        button:disabled { 
-            background: #cbd5e1; 
-            cursor: not-allowed; 
-            transform: none;
+            margin-top: 15px;
         }
 
         #resultBox { 
@@ -219,58 +171,34 @@
             border-radius: 8px; 
             display: none; 
             white-space: pre-wrap;
-            font-size: 0.95rem;
-            line-height: 1.7;
-            border: 1px solid var(--success-bg);
-            background: var(--success-bg);
-            color: var(--success-text);
+            background: #dcfce7;
+            color: #166534;
         }
 
         #resultBox.error { 
-            border-color: #fca5a5; 
-            background: var(--error-bg); 
-            color: var(--error-text); 
+            background: #fee2e2; 
+            color: #991b1b; 
         }
 
-        /* Loading Spinner */
-        .loading-container {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-        }
+        .loading-container { display: none; text-align: center; margin-top: 20px; }
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #ffffff;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-        }
     </style>
 </head>
 <body>
+
+    <div class="light-string">
+        <div class="light red"></div><div class="light green"></div>
+        <div class="light blue"></div><div class="light yellow"></div>
+        <div class="light red"></div><div class="light green"></div>
+        <div class="light blue"></div><div class="light yellow"></div>
+        <div class="light red"></div><div class="light green"></div>
+        <div class="light blue"></div><div class="light yellow"></div>
+    </div>
+
+    <img src="girl1.png" class="bg-dancer dancer-left" alt="">
+    <img src="girl2.png" class="bg-dancer dancer-right" alt="">
 
     <div class="fun-header-container">
         <img src="confused-gemini.png" alt="Confused Gemini Anime Girl" class="confused-gemini-img">
@@ -278,40 +206,30 @@
     </div>
 
     <div class="app-container">
-        <div class="header">
-            <h1>AI Content Detector</h1>
-            <p>Instantly analyze images and text to spot AI generation.</p>
-        </div>
-
         <div class="card">
-            
-            <div class="how-it-works">
-                <h4>🔍 How it works</h4>
-                <p>Upload a suspicious image, paste some text, or do both! Our digital forensic model will scan the content for common AI artifacts (like impossible geometry in photos) or robotic phrasing (in text).</p>
+            <div style="background-color: #eff6ff; border-radius: 8px; padding: 16px; margin-bottom: 24px; border-left: 4px solid var(--primary);">
+                <h4 style="margin:0; color:#1e3a8a;">🔍 Forensic Mode Active</h4>
+                <p style="margin:5px 0 0 0; font-size:0.85rem; color:#1e40af;">Upload an image or paste text to see if it's AI-generated.</p>
             </div>
 
-            <div class="input-group">
-                <label for="imageInput">1. Upload Image (Optional)</label>
-                <input type="file" id="imageInput" accept="image/*">
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight:600; display:block; margin-bottom:8px;">1. Upload Image</label>
+                <input type="file" id="imageInput" accept="image/*" style="width:100%;">
             </div>
 
-            <div class="input-group">
-                <label for="textInput">2. Paste Text (Optional)</label>
-                <textarea id="textInput" placeholder="Paste the article, essay, or email here..."></textarea>
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight:600; display:block; margin-bottom:8px;">2. Paste Text</label>
+                <textarea id="textInput" placeholder="Paste content here..."></textarea>
             </div>
 
             <button id="analyzeBtn" onclick="analyzeContent()">Analyze Content</button>
             
             <div id="loadingContainer" class="loading-container">
                 <div class="spinner"></div>
-                <div class="loading-text">Forensic analysis in progress...</div>
+                <div style="margin-top:10px; color:#64748b; font-size:0.9rem;">Raving through the data...</div>
             </div>
 
             <div id="resultBox"></div>
-        </div>
-
-        <div class="footer">
-            Built securely with Google Gemini & Vercel
         </div>
     </div>
 
@@ -321,12 +239,7 @@
                 const reader = new FileReader();
                 reader.onloadend = () => {
                     const base64Data = reader.result.split(',')[1];
-                    resolve({
-                        inlineData: {
-                            data: base64Data,
-                            mimeType: file.type
-                        }
-                    });
+                    resolve({ inlineData: { data: base64Data, mimeType: file.type } });
                 };
                 reader.onerror = reject;
                 reader.readAsDataURL(file);
@@ -341,7 +254,7 @@
             const analyzeBtn = document.getElementById('analyzeBtn');
 
             if (!imageFile && !textContent) {
-                alert("Please upload an image or enter some text to analyze.");
+                alert("Please provide something to analyze!");
                 return;
             }
 
@@ -349,56 +262,27 @@
             resultBox.className = '';
             loadingContainer.style.display = 'block';
             analyzeBtn.disabled = true;
-            analyzeBtn.innerText = "Analyzing...";
 
             try {
-                const prompt = `You are an expert digital forensic analyst. Examine the provided content and determine if it is likely AI-generated or human-created. Look for common AI artifacts in images (e.g., weird textures, impossible geometry) or robotic phrasing/hallucinations in text. Provide your response strictly in this format: VERDICT, CONFIDENCE, and REASONING.`;
-                
+                const prompt = "Analyze the provided content. Is it likely AI-generated or human-created? Provide your response strictly in this format: VERDICT, CONFIDENCE, and REASONING.";
                 let parts = [{ text: prompt }];
-
-                if (textContent) {
-                    parts.push({ text: `\n\nContent to analyze: "${textContent}"` });
-                }
-
+                if (textContent) parts.push({ text: textContent });
                 if (imageFile) {
                     const imagePart = await fileToGenerativePart(imageFile);
                     parts.push(imagePart);
                 }
 
-                const apiUrl = `/api/detect`; 
-                
-                const requestBody = {
-                    contents: [{
-                        parts: parts
-                    }],
-                    generationConfig: {
-                        temperature: 0.1,
-                        topK: 32,
-                        topP: 1
-                    }
-                };
-
-                const response = await fetch(apiUrl, {
+                const response = await fetch('/api/detect', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestBody)
+                    body: JSON.stringify({ contents: [{ parts: parts }], generationConfig: { temperature: 0.1 } })
                 });
 
-                if (!response.ok) {
-                    const errorText = await response.text(); 
-                    throw new Error(`Server returned a ${response.status} error. Remember: Images must be under 3.5MB!`);
-                }
+                if (!response.ok) throw new Error(`Server error. Images must be under 3.5MB!`);
 
                 const data = await response.json();
-
-                if (data.candidates && data.candidates.length > 0) {
-                    const analysisText = data.candidates[0].content.parts[0].text;
-                    resultBox.innerHTML = `<strong>Analysis Results:</strong><br><br>${analysisText}`;
-                } else if (data.error) {
-                    throw new Error(data.error.message || "Gemini API rejected the request.");
-                } else {
-                    throw new Error("Received an unexpected response format from the server.");
-                }
+                const analysisText = data.candidates[0].content.parts[0].text;
+                resultBox.innerHTML = `<strong>Analysis Results:</strong><br><br>${analysisText}`;
 
             } catch (error) {
                 resultBox.className = 'error';
@@ -407,7 +291,6 @@
                 loadingContainer.style.display = 'none';
                 resultBox.style.display = 'block';
                 analyzeBtn.disabled = false;
-                analyzeBtn.innerText = "Analyze Content";
             }
         }
     </script>
