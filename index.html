@@ -20,21 +20,6 @@
             100% { background-color: #ff0055; }
         }
 
-        /* --- CHRISTMAS LIGHTS FLICKER --- */
-        @keyframes flicker {
-            0%, 100% { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 5px currentColor); }
-            50% { opacity: 0.4; filter: brightness(0.8) drop-shadow(0 0 0px currentColor); }
-        }
-
-        /* --- FLOATING DANCE ANIMATION --- */
-        @keyframes floatDance {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(50px, -20px) rotate(10deg); }
-            50% { transform: translate(100px, 0) rotate(0deg); }
-            75% { transform: translate(50px, 20px) rotate(-10deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
-        }
-
         body { 
             font-family: 'Inter', sans-serif; 
             animation: caramelldansen 0.8s infinite; 
@@ -48,46 +33,21 @@
             overflow-x: hidden;
         }
 
-        /* Christmas Lights Container */
-        .light-string {
+        /* --- SINGLE BACKGROUND IMAGE --- */
+        .single-bg-image {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 30px;
-            display: flex;
-            justify-content: space-around;
-            padding: 5px 0;
-            z-index: 2000;
-            background: rgba(0,0,0,0.2);
-            pointer-events: none;
-        }
-
-        .light {
-            width: 15px;
-            height: 22px;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            position: relative;
-        }
-
-        /* Different colored lights with staggered flicker */
-        .light.red { color: #ff0000; background: #ff0000; animation: flicker 0.6s infinite; }
-        .light.green { color: #00ff00; background: #00ff00; animation: flicker 0.8s infinite 0.2s; }
-        .light.blue { color: #0000ff; background: #0000ff; animation: flicker 0.7s infinite 0.4s; }
-        .light.yellow { color: #ffff00; background: #ffff00; animation: flicker 0.9s infinite 0.1s; }
-
-        /* Background Dancing Girls */
-        .bg-dancer {
-            position: fixed;
-            width: 150px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100vw;
+            min-height: 100vh;
+            width: auto;
             height: auto;
             z-index: -1;
-            opacity: 0.5;
+            opacity: 0.3; /* Change this (0.1 to 1.0) to make the image darker or lighter */
             pointer-events: none;
+            object-fit: cover; /* Ensures the image fills the screen without stretching weirdly */
         }
-
-        .dancer-left { top: 20%; left: 5%; animation: floatDance 4s infinite linear; }
-        .dancer-right { bottom: 20%; right: 5%; animation: floatDance 5s infinite linear reverse; }
 
         .fun-header-container {
             display: flex;
@@ -188,17 +148,7 @@
 </head>
 <body>
 
-    <div class="light-string">
-        <div class="light red"></div><div class="light green"></div>
-        <div class="light blue"></div><div class="light yellow"></div>
-        <div class="light red"></div><div class="light green"></div>
-        <div class="light blue"></div><div class="light yellow"></div>
-        <div class="light red"></div><div class="light green"></div>
-        <div class="light blue"></div><div class="light yellow"></div>
-    </div>
-
-    <img src="girl1.png" class="bg-dancer dancer-left" alt="">
-    <img src="girl2.png" class="bg-dancer dancer-right" alt="">
+    <img src="background.png" class="single-bg-image" alt="">
 
     <div class="fun-header-container">
         <img src="confused-gemini.png" alt="Confused Gemini Anime Girl" class="confused-gemini-img">
