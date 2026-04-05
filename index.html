@@ -3,26 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Content Detector | Rave Edition</title>
+    <title>AI Content Detector | Anime Edition</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CARAMELLDANSEN RAINBOW ANIMATION --- */
-        @keyframes caramelldansen {
-            0%   { background-color: #ff0055; }
-            16%  { background-color: #ffaa00; }
-            33%  { background-color: #ffee00; }
-            50%  { background-color: #00ff00; }
-            66%  { background-color: #00aaff; }
-            83%  { background-color: #aa00ff; }
-            100% { background-color: #ff0055; }
-        }
-
         body { 
             font-family: 'Inter', sans-serif; 
-            animation: caramelldansen 0.8s infinite; 
+            background-color: #1e293b; /* A smooth dark fallback color */
             color: var(--text-main);
             margin: 0;
             padding: 60px 20px 40px 20px;
@@ -44,9 +33,9 @@
             width: auto;
             height: auto;
             z-index: -1;
-            opacity: 0.3; /* Change this (0.1 to 1.0) to make the image darker or lighter */
+            opacity: 0.9; /* Set to 90% opacity */
             pointer-events: none;
-            object-fit: cover; /* Ensures the image fills the screen without stretching weirdly */
+            object-fit: cover; 
         }
 
         .fun-header-container {
@@ -176,7 +165,7 @@
             
             <div id="loadingContainer" class="loading-container">
                 <div class="spinner"></div>
-                <div style="margin-top:10px; color:#64748b; font-size:0.9rem;">Raving through the data...</div>
+                <div style="margin-top:10px; color:#64748b; font-size:0.9rem;">Running forensic scan...</div>
             </div>
 
             <div id="resultBox"></div>
